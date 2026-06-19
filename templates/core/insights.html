@@ -1,0 +1,44 @@
+{% extends "core/base.html" %}
+{% block title %}Reduce{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">Reduce your footprint</h1>
+
+{% if not summary %}
+<p class="text-sm text-gray-500">Log some activity first to get personalized insights.</p>
+{% else %}
+
+{% if tip %}
+<div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+    <h2 class="font-semibold mb-1">Personalized insight</h2>
+    <p class="text-sm">{{ tip }}</p>
+</div>
+{% endif %}
+
+{% if insights %}
+<ul class="list-disc list-inside text-sm space-y-1 mb-6">
+    {% for insight in insights %}
+    <li>{{ insight }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<div class="bg-white rounded-lg shadow p-4">
+    <h2 class="font-semibold mb-2">
+        Recommendations
+        {% if top_category %}<span class="text-sm text-gray-500">for {{ top_category }}</span>{% endif %}
+    </h2>
+    {% if recommendations %}
+    <ul class="space-y-3">
+        {% for rec in recommendations %}
+        <li class="border-b last:border-0 pb-2">
+            <p class="text-sm">{{ rec.action }}</p>
+            <p class="text-xs text-gray-500">Potential saving: {{ rec.potential_saving_kg }} kg/month · Effort: {{ rec.get_effort_display }}</p>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-sm text-gray-500">No recommendations yet for this category.</p>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

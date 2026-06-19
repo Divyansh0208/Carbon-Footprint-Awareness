@@ -1,0 +1,86 @@
+{% extends "core/base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">Your Dashboard</h1>
+    <a href="{% url 'log_activity' %}" class="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800">+ Log Activity</a>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+    <div class="bg-white rounded-lg shadow p-4">
+        <p class="text-sm text-gray-500">Last 30 days total</p>
+        <p class="text-3xl font-bold text-green-700">{{ total }} kg CO2e</p>
+    </div>
+    <div class="bg-white rounded-lg shadow p-4">
+        <p class="text-sm text-gray-500">Monthly goal</p>
+        {% if goal %}
+        <p class="text-3xl font-bold">{{ goal.target_kg_per_month }} kg</p>
+        <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+            <div class="bg-green-600 h-2 rounded-full" style="width: {{ progress_pct }}%"></div>
+        </div>
+        <p class="text-xs text-gray-500 mt-1">{{ progress_pct }}% of goal used</p>
+        {% else %}
+        <p class="text-sm">No goal set yet.</p>
+        {% endif %}
+        <a href="{% url 'goal' %}" class="text-green-700 text-sm underline">Set / edit goal</a>
+    </div>
+</div>
+
+{% if insights %}
+<div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+    <h2 class="font-semibold mb-2">Insights</h2>
+    <ul class="list-disc list-inside text-sm space-y-1">
+        {% for insight in insights %}
+        <li>{{ insight }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+{% if chart_labels %}
+<div class="bg-white rounded-lg shadow p-4 mb-6">
+    <h2 class="font-semibold mb-2">Breakdown by category</h2>
+    <canvas id="breakdownChart" height="120"></canvas>
+</div>
+<script>
+new Chart(document.getElementById('breakdownChart'), {
+    type: 'doughnut',
+    data: {
+        labels: {{ chart_labels|safe }},
+        datasets: [{
+            data: {{ chart_values|safe }},
+            backgroundColor: ['#15803d', '#65a30d', '#0891b2', '#a16207']
+        }]
+    }
+});
+</script>
+{% endif %}
+
+<div class="bg-white rounded-lg shadow p-4">
+    <h2 class="font-semibold mb-2">Recent activity</h2>
+    {% if logs %}
+    <table class="w-full text-sm">
+        <thead>
+            <tr class="text-left text-gray-500 border-b">
+                <th class="py-1">Date</th>
+                <th>Activity</th>
+                <th>Quantity</th>
+                <th>CO2 (kg)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+            <tr class="border-b last:border-0">
+                <td class="py-1">{{ log.date }}</td>
+                <td>{{ log.factor.label }}</td>
+                <td>{{ log.quantity }} {{ log.factor.unit }}</td>
+                <td>{{ log.co2_kg|floatformat:1 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="text-sm text-gray-500">No activity logged yet. <a href="{% url 'log_activity' %}" class="text-green-700 underline">Log your first activity</a>.</p>
+    {% endif %}
+</div>
+{% endblock %}

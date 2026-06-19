@@ -1,0 +1,7 @@
+<label class="block text-sm font-medium mb-1">Activity type</label>
+<select name="factor" id="id_factor" class="w-full border rounded px-2 py-1">
+    <option value="">-- select activity --</option>
+    {% for f in factors %}
+    <option value="{{ f.id }}">{{ f.label }} ({{ f.unit }})</option>
+    {% endfor %}
+</select>
