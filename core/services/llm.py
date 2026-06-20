@@ -11,11 +11,8 @@ Role in platform: personalization + Q&A layer ONLY.
 import re
 import logging
 from datetime import date
-# pyrefly: ignore [missing-import]
 from django.conf import settings
-# pyrefly: ignore [missing-import]
 from django.core.cache import cache
-# pyrefly: ignore [missing-import]
 from openai import OpenAI
 
 logger = logging.getLogger(__name__)
@@ -104,7 +101,8 @@ def get_education_tip(user, summary: dict, national_avg: dict) -> str:
         "Write a 2-3 sentence educational explanation of their highest-emission "
         "category and one concrete, low-effort action to reduce it. "
         "Friendly, non-judgmental tone. "
-        "Do not state any numeric value that is not given above."
+        "Do not state any numeric value that is not given above. "
+        "Plain text only — no markdown, no asterisks, no bullet points, no bold or italic formatting."
     )
 
     text, error = _call_llm([{"role": "user", "content": prompt}])
@@ -141,7 +139,8 @@ def answer_question(user, summary: dict, question: str) -> str:
         f"User's emissions context this month (kg CO2 by category): {summary}\n"
         f"User question: {question}\n\n"
         "Answer in 2-4 sentences, educational tone. "
-        "Do not invent or state any numeric value not given above."
+        "Do not invent or state any numeric value not given above. "
+        "Plain text only — no markdown, no asterisks, no bullet points, no bold or italic formatting."
     )
 
     text, error = _call_llm([{"role": "user", "content": prompt}])
