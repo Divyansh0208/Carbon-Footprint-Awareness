@@ -33,8 +33,7 @@
         {% for rec in recommendations %}
         <li class="border-b border-stonelight last:border-0 pb-4 last:pb-0">
             <p class="text-sm text-ink">{{ rec.action }}</p>
-            <p class="text-xs text-stone mt-1.5 gauge">−{{ rec.potential_saving_kg }} kg/mo <span class="font-body">· {{
-                    rec.get_effort_display }} effort</span></p>
+            <p class="text-xs text-stone mt-1.5 gauge">−{{ rec.potential_saving_kg }} kg/mo <span class="font-body">· {{ rec.get_effort_display }} effort</span></p>
         </li>
         {% endfor %}
     </ul>
