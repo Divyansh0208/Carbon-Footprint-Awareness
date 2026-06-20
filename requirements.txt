@@ -2,7 +2,9 @@ Django>=5.0
 openai>=1.30.0
 python-decouple>=3.8
 whitenoise>=6.6.0
+gunicorn>=21.2.0
 
+# Production datastore deps (no-op locally unless DATABASE_URL / REDIS_URL are set)
 dj-database-url>=2.1.0
 psycopg2-binary>=2.9.9
 django-redis>=5.4.0
