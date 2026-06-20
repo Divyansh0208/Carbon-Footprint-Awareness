@@ -1,15 +1,36 @@
 {% extends "core/base.html" %}
 {% block title %}Dashboard{% endblock %}
 {% block content %}
-<div class="flex justify-between items-baseline mb-10">
-    <div>
-        <p class="text-xs uppercase tracking-widest text-stone font-medium mb-1">Track</p>
-        <h1 class="text-3xl font-display font-semibold tracking-tight">Your ledger</h1>
+
+<div class="border-2 border-ink -mx-6 -mt-10 px-10 py-14 mb-12 relative">
+    <div class="flex justify-between items-start gap-10">
+        <div class="max-w-md">
+            <p class="text-xs uppercase tracking-widest text-stone font-medium mb-1">Track</p>
+            <h1 class="text-4xl md:text-5xl font-display font-semibold tracking-tight leading-tight">
+                Log it.<br>Understand it.<br>Reduce it.
+            </h1>
+            <p class="text-base text-ink/75 leading-relaxed mt-5 max-w-sm">
+                Your everyday carbon footprint, tracked plainly and explained without the guesswork.
+            </p>
+            <a href="{% url 'log_activity' %}" class="inline-block mt-7 bg-moss text-paper px-5 py-2.5 rounded-sm text-sm font-medium hover:bg-mossdark transition-colors focus-ring">+ Log activity</a>
+        </div>
+
+        <div class="border border-stonelight bg-paper p-6 w-72 shrink-0 hidden md:block">
+            <p class="text-xs uppercase tracking-widest text-stone font-medium mb-3">Last 30 days</p>
+            <p class="gauge text-4xl text-ink leading-none">{{ total }}<span class="text-sm text-stone ml-1.5 font-body">kg CO2e</span></p>
+            {% if goal %}
+            <div class="w-full bg-stonelight h-1.5 mt-5 rounded-full overflow-hidden">
+                <div class="{% if progress_pct >= 100 %}bg-rust{% else %}bg-moss{% endif %} h-1.5" style="width: {{ progress_pct }}%"></div>
+            </div>
+            <p class="text-xs text-stone mt-2 gauge">{{ progress_pct }}% of monthly goal</p>
+            {% else %}
+            <p class="text-xs text-stone mt-3">No goal set yet. <a href="{% url 'goal' %}" class="text-moss font-medium hover:text-mossdark focus-ring">Set one →</a></p>
+            {% endif %}
+        </div>
     </div>
-    <a href="{% url 'log_activity' %}" class="bg-moss text-paper px-4 py-2 rounded-sm text-sm font-medium hover:bg-mossdark transition-colors focus-ring">+ Log activity</a>
 </div>
 
-<div class="grid grid-cols-1 md:grid-cols-2 gap-px bg-stonelight border border-stonelight mb-10">
+<div class="md:hidden grid grid-cols-1 gap-px bg-stonelight border border-stonelight mb-10">
     <div class="bg-paper p-6">
         <p class="text-xs uppercase tracking-widest text-stone font-medium mb-3">Last 30 days</p>
         <p class="gauge text-4xl text-ink leading-none">{{ total }}<span class="text-base text-stone ml-1.5 font-body">kg CO2e</span></p>
@@ -28,6 +49,12 @@
         <a href="{% url 'goal' %}" class="text-moss text-sm font-medium hover:text-mossdark transition-colors focus-ring inline-block mt-2">Set / edit goal →</a>
     </div>
 </div>
+
+{% if goal %}
+<div class="hidden md:flex justify-end mb-10 -mt-2">
+    <a href="{% url 'goal' %}" class="text-moss text-sm font-medium hover:text-mossdark transition-colors focus-ring">Edit monthly goal →</a>
+</div>
+{% endif %}
 
 {% if insights %}
 <div class="border-l-2 border-rust bg-rust/5 px-5 py-4 mb-10">
