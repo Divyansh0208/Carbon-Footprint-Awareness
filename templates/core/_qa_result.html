@@ -1,11 +1,12 @@
 <form hx-post="{% url 'qa' %}" hx-target="#qa-widget" hx-swap="innerHTML" class="flex gap-2">
     {% csrf_token %}
     {{ form.question }}
-    <button type="submit" class="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800 whitespace-nowrap">Ask</button>
+    <button type="submit"
+        class="bg-moss text-paper px-4 py-2 rounded-sm text-sm font-medium hover:bg-mossdark transition-colors focus-ring whitespace-nowrap">Ask</button>
 </form>
 {% if answer %}
-<p class="text-sm bg-green-50 border border-green-200 rounded p-3 mt-3">{{ answer }}</p>
+<p class="text-sm text-ink bg-paper border border-moss/20 rounded-sm p-3.5 mt-3 leading-relaxed">{{ answer }}</p>
 {% endif %}
 {% if error %}
-<p class="text-sm bg-red-50 border border-red-200 rounded p-3 mt-3 text-red-700">{{ error }}</p>
+<p class="text-sm bg-rust/5 border border-rust/20 rounded-sm p-3.5 mt-3 text-rust">{{ error }}</p>
 {% endif %}

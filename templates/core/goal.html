@@ -1,10 +1,13 @@
 {% extends "core/base.html" %}
 {% block title %}Set Goal{% endblock %}
 {% block content %}
-<h1 class="text-2xl font-bold mb-4">Set your monthly goal</h1>
-<form method="post" class="space-y-4 max-w-sm bg-white rounded-lg shadow p-4">
+<p class="text-xs uppercase tracking-widest text-stone font-medium mb-1">Reduce</p>
+<h1 class="text-3xl font-display font-semibold tracking-tight mb-8">Set your monthly goal</h1>
+<form method="post" class="space-y-1 max-w-sm border border-stonelight p-6">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800">Save Goal</button>
+    <button type="submit"
+        class="bg-moss text-paper px-5 py-2 rounded-sm text-sm font-medium hover:bg-mossdark transition-colors focus-ring mt-2">Save
+        goal</button>
 </form>
 {% endblock %}

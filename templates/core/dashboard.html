@@ -1,35 +1,45 @@
 {% extends "core/base.html" %}
 {% block title %}Dashboard{% endblock %}
 {% block content %}
-<div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold">Your Dashboard</h1>
-    <a href="{% url 'log_activity' %}" class="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800">+ Log Activity</a>
+<div class="flex justify-between items-baseline mb-10">
+    <div>
+        <p class="text-xs uppercase tracking-widest text-stone font-medium mb-1">Track</p>
+        <h1 class="text-3xl font-display font-semibold tracking-tight">Your ledger</h1>
+    </div>
+    <a href="{% url 'log_activity' %}"
+        class="bg-moss text-paper px-4 py-2 rounded-sm text-sm font-medium hover:bg-mossdark transition-colors focus-ring">+
+        Log activity</a>
 </div>
 
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-    <div class="bg-white rounded-lg shadow p-4">
-        <p class="text-sm text-gray-500">Last 30 days total</p>
-        <p class="text-3xl font-bold text-green-700">{{ total }} kg CO2e</p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-px bg-stonelight border border-stonelight mb-10">
+    <div class="bg-paper p-6">
+        <p class="text-xs uppercase tracking-widest text-stone font-medium mb-3">Last 30 days</p>
+        <p class="gauge text-4xl text-ink leading-none">{{ total }}<span
+                class="text-base text-stone ml-1.5 font-body">kg CO2e</span></p>
     </div>
-    <div class="bg-white rounded-lg shadow p-4">
-        <p class="text-sm text-gray-500">Monthly goal</p>
+    <div class="bg-paper p-6">
+        <p class="text-xs uppercase tracking-widest text-stone font-medium mb-3">Monthly goal</p>
         {% if goal %}
-        <p class="text-3xl font-bold">{{ goal.target_kg_per_month }} kg</p>
-        <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
-            <div class="bg-green-600 h-2 rounded-full" style="width: {{ progress_pct }}%"></div>
+        <p class="gauge text-4xl text-ink leading-none">{{ goal.target_kg_per_month }}<span
+                class="text-base text-stone ml-1.5 font-body">kg target</span></p>
+        <div class="w-full bg-stonelight h-1.5 mt-4 rounded-full overflow-hidden">
+            <div class="{% if progress_pct >= 100 %}bg-rust{% else %}bg-moss{% endif %} h-1.5"
+                style="width: {{ progress_pct }}%"></div>
         </div>
-        <p class="text-xs text-gray-500 mt-1">{{ progress_pct }}% of goal used</p>
+        <p class="text-xs text-stone mt-2 gauge">{{ progress_pct }}% used</p>
         {% else %}
-        <p class="text-sm">No goal set yet.</p>
+        <p class="text-sm text-stone mb-2">No goal set yet.</p>
         {% endif %}
-        <a href="{% url 'goal' %}" class="text-green-700 text-sm underline">Set / edit goal</a>
+        <a href="{% url 'goal' %}"
+            class="text-moss text-sm font-medium hover:text-mossdark transition-colors focus-ring inline-block mt-2">Set
+            / edit goal →</a>
     </div>
 </div>
 
 {% if insights %}
-<div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-    <h2 class="font-semibold mb-2">Insights</h2>
-    <ul class="list-disc list-inside text-sm space-y-1">
+<div class="border-l-2 border-rust bg-rust/5 px-5 py-4 mb-10">
+    <h2 class="text-xs uppercase tracking-widest text-rust font-semibold mb-2">Insights</h2>
+    <ul class="text-sm space-y-1.5 text-ink">
         {% for insight in insights %}
         <li>{{ insight }}</li>
         {% endfor %}
@@ -38,49 +48,55 @@
 {% endif %}
 
 {% if chart_labels %}
-<div class="bg-white rounded-lg shadow p-4 mb-6">
-    <h2 class="font-semibold mb-2">Breakdown by category</h2>
+<div class="border border-stonelight p-6 mb-10">
+    <h2 class="text-xs uppercase tracking-widest text-stone font-medium mb-4">Breakdown by category</h2>
     <canvas id="breakdownChart" height="120"></canvas>
 </div>
 <script>
-new Chart(document.getElementById('breakdownChart'), {
-    type: 'doughnut',
-    data: {
-        labels: {{ chart_labels|safe }},
+    new Chart(document.getElementById('breakdownChart'), {
+        type: 'doughnut',
+        data: {
+            labels: {{ chart_labels| safe }},
         datasets: [{
-            data: {{ chart_values|safe }},
-            backgroundColor: ['#15803d', '#65a30d', '#0891b2', '#a16207']
+            data: {{ chart_values| safe }},
+        backgroundColor: ['#3D5A45', '#8B8378', '#C75D3B', '#D9D4C8'],
+        borderColor: '#F7F5F0',
+        borderWidth: 2
         }]
+    },
+        options: {
+        plugins: { legend: { labels: { font: { family: 'Inter' } } } }
     }
 });
 </script>
 {% endif %}
 
-<div class="bg-white rounded-lg shadow p-4">
-    <h2 class="font-semibold mb-2">Recent activity</h2>
+<div class="border border-stonelight p-6">
+    <h2 class="text-xs uppercase tracking-widest text-stone font-medium mb-4">Recent activity</h2>
     {% if logs %}
     <table class="w-full text-sm">
         <thead>
-            <tr class="text-left text-gray-500 border-b">
-                <th class="py-1">Date</th>
-                <th>Activity</th>
-                <th>Quantity</th>
-                <th>CO2 (kg)</th>
+            <tr class="text-left text-stone border-b border-stonelight text-xs uppercase tracking-wide">
+                <th class="py-2 font-medium">Date</th>
+                <th class="font-medium">Activity</th>
+                <th class="font-medium">Quantity</th>
+                <th class="font-medium text-right">CO2 (kg)</th>
             </tr>
         </thead>
         <tbody>
             {% for log in logs %}
-            <tr class="border-b last:border-0">
-                <td class="py-1">{{ log.date }}</td>
+            <tr class="border-b border-stonelight last:border-0">
+                <td class="py-2.5 text-stone gauge text-xs">{{ log.date }}</td>
                 <td>{{ log.factor.label }}</td>
-                <td>{{ log.quantity }} {{ log.factor.unit }}</td>
-                <td>{{ log.co2_kg|floatformat:1 }}</td>
+                <td class="gauge text-xs">{{ log.quantity }} {{ log.factor.unit }}</td>
+                <td class="gauge text-right">{{ log.co2_kg|floatformat:1 }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
     {% else %}
-    <p class="text-sm text-gray-500">No activity logged yet. <a href="{% url 'log_activity' %}" class="text-green-700 underline">Log your first activity</a>.</p>
+    <p class="text-sm text-stone">No activity logged yet. <a href="{% url 'log_activity' %}"
+            class="text-moss font-medium hover:text-mossdark focus-ring">Log your first activity →</a></p>
     {% endif %}
 </div>
 {% endblock %}

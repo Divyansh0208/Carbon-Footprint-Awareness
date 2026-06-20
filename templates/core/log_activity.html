@@ -1,18 +1,17 @@
 {% extends "core/base.html" %}
 {% block title %}Log Activity{% endblock %}
 {% block content %}
-<h1 class="text-2xl font-bold mb-4">Log an activity</h1>
-<form method="post" class="space-y-4 max-w-md bg-white rounded-lg shadow p-4">
+<p class="text-xs uppercase tracking-widest text-stone font-medium mb-1">Track</p>
+<h1 class="text-3xl font-display font-semibold tracking-tight mb-8">Log an activity</h1>
+<form method="post" class="space-y-5 max-w-md border border-stonelight p-6">
     {% csrf_token %}
 
     <div>
-        <label class="block text-sm font-medium mb-1">{{ form.category.label }}</label>
+        <label class="block text-xs uppercase tracking-wide text-stone font-medium mb-1.5">{{ form.category.label
+            }}</label>
         <select name="category" id="id_category"
-            class="w-full border rounded px-2 py-1"
-            hx-get="{% url 'factor_options' %}"
-            hx-target="#factor-wrapper"
-            hx-trigger="change"
-            hx-include="this">
+            class="w-full border border-stonelight bg-paper rounded-sm px-3 py-2 text-sm focus-ring"
+            hx-get="{% url 'factor_options' %}" hx-target="#factor-wrapper" hx-trigger="change" hx-include="this">
             {% for value, label in form.category.field.choices %}
             <option value="{{ value }}">{{ label }}</option>
             {% endfor %}
@@ -20,20 +19,24 @@
     </div>
 
     <div id="factor-wrapper">
-        <label class="block text-sm font-medium mb-1">{{ form.factor.label }}</label>
+        <label class="block text-xs uppercase tracking-wide text-stone font-medium mb-1.5">{{ form.factor.label
+            }}</label>
         {{ form.factor }}
     </div>
 
     <div>
-        <label class="block text-sm font-medium mb-1">{{ form.quantity.label }}</label>
+        <label class="block text-xs uppercase tracking-wide text-stone font-medium mb-1.5">{{ form.quantity.label
+            }}</label>
         {{ form.quantity }}
     </div>
 
     <div>
-        <label class="block text-sm font-medium mb-1">{{ form.date.label }}</label>
+        <label class="block text-xs uppercase tracking-wide text-stone font-medium mb-1.5">{{ form.date.label }}</label>
         {{ form.date }}
     </div>
 
-    <button type="submit" class="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800">Save</button>
+    <button type="submit"
+        class="bg-moss text-paper px-5 py-2 rounded-sm text-sm font-medium hover:bg-mossdark transition-colors focus-ring">Save
+        entry</button>
 </form>
 {% endblock %}

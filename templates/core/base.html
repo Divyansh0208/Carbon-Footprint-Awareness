@@ -4,46 +4,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Carbon Footprint Platform{% endblock %}</title>
+    <title>{% block title %}Carbon Platform{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        paper: '#F7F5F0',
+                        ink: '#1A1A18',
+                        moss: '#3D5A45',
+                        mossdark: '#2C4233',
+                        rust: '#C75D3B',
+                        stone: '#8B8378',
+                        stonelight: '#D9D4C8',
+                    },
+                    fontFamily: {
+                        display: ['Fraunces', 'serif'],
+                        body: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-feature-settings: "tnum" 1; }
+        .gauge { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+        .focus-ring:focus-visible { outline: 2px solid #3D5A45; outline-offset: 2px; }
+        /* Django-rendered form widgets carry no classes by default — style them globally */
+        input[type=text], input[type=email], input[type=password], input[type=number],
+        input[type=date], select, textarea {
+            width: 100%;
+            background: #F7F5F0;
+            border: 1px solid #D9D4C8;
+            border-radius: 2px;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+            color: #1A1A18;
+            font-family: 'Inter', sans-serif;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: 2px solid #3D5A45;
+            outline-offset: 1px;
+            border-color: #3D5A45;
+        }
+        form p { margin-bottom: 1.1rem; }
+        form label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: #8B8378; font-weight: 500; margin-bottom: 0.35rem; }
+        form label::after { content: ''; }
+        .errorlist { color: #C75D3B; font-size: 0.8rem; list-style: none; padding: 0; margin: 0.25rem 0 0; }
+        .helptext { display: block; font-size: 0.75rem; color: #8B8378; margin-top: 0.35rem; line-height: 1.4; font-weight: 400; text-transform: none; letter-spacing: normal; }
+    </style>
 </head>
-<body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col">
-    <nav class="bg-green-700 text-white px-4 py-3 flex items-center justify-between">
-        <a href="{% url 'dashboard' %}" class="font-bold text-lg">🌍 Carbon Platform</a>
-        <div class="flex gap-4 text-sm items-center">
+<body class="bg-paper text-ink min-h-screen flex flex-col font-body antialiased {% block body_class %}{% endblock %}">
+    <nav class="border-b border-stonelight px-6 py-4 flex items-center justify-between">
+        <a href="{% url 'dashboard' %}" class="font-display font-semibold text-lg tracking-tight focus-ring">
+            Carbon<span class="text-moss">.</span>Ledger
+        </a>
+        <div class="flex gap-6 text-sm items-center font-medium">
             {% if user.is_authenticated %}
-                <a href="{% url 'dashboard' %}" class="hover:underline">Track</a>
-                <a href="{% url 'learn' %}" class="hover:underline">Understand</a>
-                <a href="{% url 'insights' %}" class="hover:underline">Reduce</a>
-                <a href="{% url 'glossary' %}" class="hover:underline">Glossary</a>
-                <span class="opacity-75">{{ user.username }}</span>
+                <a href="{% url 'dashboard' %}" class="hover:text-moss transition-colors focus-ring">Track</a>
+                <a href="{% url 'learn' %}" class="hover:text-moss transition-colors focus-ring">Understand</a>
+                <a href="{% url 'insights' %}" class="hover:text-moss transition-colors focus-ring">Reduce</a>
+                <a href="{% url 'glossary' %}" class="hover:text-moss transition-colors focus-ring">Glossary</a>
+                <span class="text-stone border-l border-stonelight pl-6">{{ user.username }}</span>
                 <form method="post" action="{% url 'logout' %}" class="inline">
                     {% csrf_token %}
-                    <button type="submit" class="hover:underline">Logout</button>
+                    <button type="submit" class="text-stone hover:text-rust transition-colors focus-ring">Log out</button>
                 </form>
             {% else %}
-                <a href="{% url 'login' %}" class="hover:underline">Login</a>
-                <a href="{% url 'signup' %}" class="hover:underline">Sign up</a>
+                <a href="{% url 'login' %}" class="hover:text-moss transition-colors focus-ring">Log in</a>
+                <a href="{% url 'signup' %}" class="bg-moss text-paper px-4 py-1.5 rounded-sm hover:bg-mossdark transition-colors focus-ring">Sign up</a>
             {% endif %}
         </div>
     </nav>
 
     {% if messages %}
-    <div class="max-w-3xl mx-auto mt-4 w-full px-4">
+    <div class="max-w-3xl mx-auto mt-4 w-full px-6">
         {% for message in messages %}
-        <div class="bg-blue-100 text-blue-800 px-4 py-2 rounded mb-2">{{ message }}</div>
+        <div class="bg-moss/10 border border-moss/30 text-mossdark px-4 py-2.5 rounded-sm mb-2 text-sm">{{ message }}</div>
         {% endfor %}
     </div>
     {% endif %}
 
-    <main class="flex-1 max-w-3xl mx-auto w-full px-4 py-6">
+    <main class="flex-1 max-w-3xl mx-auto w-full px-6 py-10">
         {% block content %}{% endblock %}
     </main>
 
-    <footer class="text-center text-xs text-gray-400 py-4">
-        Carbon Footprint Education Platform — MVP
+    <footer class="text-center text-xs text-stone py-6 border-t border-stonelight">
+        Carbon Footprint Education Platform — MVP, approximate figures
     </footer>
 </body>
 </html>

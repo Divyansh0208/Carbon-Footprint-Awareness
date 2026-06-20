@@ -1,15 +1,18 @@
 {% extends "core/base.html" %}
 {% block title %}Glossary{% endblock %}
 {% block content %}
-<h1 class="text-2xl font-bold mb-4">Glossary</h1>
-<div class="bg-white rounded-lg shadow divide-y">
-    {% for term in terms %}
-    <div class="p-4">
-        <p class="font-semibold">{{ term.term }}</p>
-        <p class="text-sm text-gray-700">{{ term.definition }}</p>
-    </div>
-    {% empty %}
-    <p class="p-4 text-sm text-gray-500">No terms yet — run the seed command.</p>
-    {% endfor %}
+<div class="max-w-2xl mx-auto">
+    <p class="text-xs uppercase tracking-widest text-stone font-medium mb-1">Understand</p>
+    <h1 class="text-3xl font-display font-semibold tracking-tight mb-10">Glossary</h1>
+    <dl class="divide-y divide-stonelight">
+        {% for term in terms %}
+        <div class="py-5">
+            <dt class="font-display font-medium text-lg">{{ term.term }}</dt>
+            <dd class="text-[15px] text-ink/85 leading-relaxed mt-1.5">{{ term.definition }}</dd>
+        </div>
+        {% empty %}
+        <p class="py-5 text-sm text-stone">No terms yet — run the seed command.</p>
+        {% endfor %}
+    </dl>
 </div>
 {% endblock %}

@@ -1,11 +1,15 @@
+# pyrefly: ignore [missing-import]
 from django import forms
+# pyrefly: ignore [missing-import]
 from django.contrib.auth.forms import UserCreationForm
+# pyrefly: ignore [missing-import]
 from django.contrib.auth.models import User
 from .models import ActivityLog, EmissionFactor, Goal
 
 
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(required=True)
+    label_suffix = ''
 
     class Meta:
         model = User
@@ -35,6 +39,8 @@ class ActivityLogForm(forms.ModelForm):
 
 
 class GoalForm(forms.ModelForm):
+    label_suffix = ''
+
     class Meta:
         model = Goal
         fields = ['target_kg_per_month']

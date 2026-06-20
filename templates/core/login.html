@@ -1,11 +1,16 @@
 {% extends "core/base.html" %}
-{% block title %}Login{% endblock %}
+{% block title %}Log in{% endblock %}
 {% block content %}
-<h1 class="text-2xl font-bold mb-4">Login</h1>
-<form method="post" class="space-y-4 max-w-sm">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800">Login</button>
-</form>
-<p class="mt-4 text-sm">No account? <a href="{% url 'signup' %}" class="text-green-700 underline">Sign up</a></p>
+<div class="max-w-sm mx-auto pt-8">
+    <h1 class="text-3xl font-display font-semibold tracking-tight mb-8 text-center">Welcome back</h1>
+    <form method="post" class="space-y-1 border border-stonelight p-6">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit"
+            class="w-full bg-moss text-paper px-5 py-2.5 rounded-sm text-sm font-medium hover:bg-mossdark transition-colors focus-ring mt-2">Log
+            in</button>
+    </form>
+    <p class="mt-5 text-sm text-center text-stone">No account? <a href="{% url 'signup' %}"
+            class="text-moss font-medium hover:text-mossdark focus-ring">Sign up</a></p>
+</div>
 {% endblock %}

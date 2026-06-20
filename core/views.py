@@ -1,10 +1,19 @@
 from datetime import date, timedelta
+# pyrefly: ignore [missing-import]
 from django.contrib.auth import login
+# pyrefly: ignore [missing-import]
 from django.contrib.auth.decorators import login_required
+# pyrefly: ignore [missing-import]
 from django.contrib.auth.views import LoginView, LogoutView
+# pyrefly: ignore [missing-import]
+from django.contrib.auth.forms import AuthenticationForm
+# pyrefly: ignore [missing-import]
 from django.db.models import Sum
+# pyrefly: ignore [missing-import]
 from django.shortcuts import render, redirect, get_object_or_404
+# pyrefly: ignore [missing-import]
 from django.urls import reverse_lazy
+# pyrefly: ignore [missing-import]
 from django.http import JsonResponse
 
 from .models import (
@@ -38,8 +47,13 @@ def signup_view(request):
     return render(request, 'core/signup.html', {'form': form})
 
 
+class NoColonAuthenticationForm(AuthenticationForm):
+    label_suffix = ''
+
+
 class CustomLoginView(LoginView):
     template_name = 'core/login.html'
+    authentication_form = NoColonAuthenticationForm
 
 
 class CustomLogoutView(LogoutView):

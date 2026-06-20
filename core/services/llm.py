@@ -11,8 +11,11 @@ Role in platform: personalization + Q&A layer ONLY.
 import re
 import logging
 from datetime import date
+# pyrefly: ignore [missing-import]
 from django.conf import settings
+# pyrefly: ignore [missing-import]
 from django.core.cache import cache
+# pyrefly: ignore [missing-import]
 from openai import OpenAI
 
 logger = logging.getLogger(__name__)
@@ -26,6 +29,10 @@ def get_client():
         _client = OpenAI(
             base_url="https://integrate.api.nvidia.com/v1",
             api_key=settings.NVIDIA_API_KEY,
+            timeout=10.0,    # seconds — without this, a hung/slow API call
+                             # can block a worker thread for the SDK default
+                             # (~10 min), starving real users under load.
+            max_retries=1,   # SDK default is 2; keep total worst-case wait bounded.
         )
     return _client
 
