@@ -6,33 +6,26 @@
         <p class="text-xs uppercase tracking-widest text-stone font-medium mb-1">Track</p>
         <h1 class="text-3xl font-display font-semibold tracking-tight">Your ledger</h1>
     </div>
-    <a href="{% url 'log_activity' %}"
-        class="bg-moss text-paper px-4 py-2 rounded-sm text-sm font-medium hover:bg-mossdark transition-colors focus-ring">+
-        Log activity</a>
+    <a href="{% url 'log_activity' %}" class="bg-moss text-paper px-4 py-2 rounded-sm text-sm font-medium hover:bg-mossdark transition-colors focus-ring">+ Log activity</a>
 </div>
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-px bg-stonelight border border-stonelight mb-10">
     <div class="bg-paper p-6">
         <p class="text-xs uppercase tracking-widest text-stone font-medium mb-3">Last 30 days</p>
-        <p class="gauge text-4xl text-ink leading-none">{{ total }}<span
-                class="text-base text-stone ml-1.5 font-body">kg CO2e</span></p>
+        <p class="gauge text-4xl text-ink leading-none">{{ total }}<span class="text-base text-stone ml-1.5 font-body">kg CO2e</span></p>
     </div>
     <div class="bg-paper p-6">
         <p class="text-xs uppercase tracking-widest text-stone font-medium mb-3">Monthly goal</p>
         {% if goal %}
-        <p class="gauge text-4xl text-ink leading-none">{{ goal.target_kg_per_month }}<span
-                class="text-base text-stone ml-1.5 font-body">kg target</span></p>
+        <p class="gauge text-4xl text-ink leading-none">{{ goal.target_kg_per_month }}<span class="text-base text-stone ml-1.5 font-body">kg target</span></p>
         <div class="w-full bg-stonelight h-1.5 mt-4 rounded-full overflow-hidden">
-            <div class="{% if progress_pct >= 100 %}bg-rust{% else %}bg-moss{% endif %} h-1.5"
-                style="width: {{ progress_pct }}%"></div>
+            <div class="{% if progress_pct >= 100 %}bg-rust{% else %}bg-moss{% endif %} h-1.5" style="width: {{ progress_pct }}%"></div>
         </div>
         <p class="text-xs text-stone mt-2 gauge">{{ progress_pct }}% used</p>
         {% else %}
         <p class="text-sm text-stone mb-2">No goal set yet.</p>
         {% endif %}
-        <a href="{% url 'goal' %}"
-            class="text-moss text-sm font-medium hover:text-mossdark transition-colors focus-ring inline-block mt-2">Set
-            / edit goal →</a>
+        <a href="{% url 'goal' %}" class="text-moss text-sm font-medium hover:text-mossdark transition-colors focus-ring inline-block mt-2">Set / edit goal →</a>
     </div>
 </div>
 
@@ -53,18 +46,18 @@
     <canvas id="breakdownChart" height="120"></canvas>
 </div>
 <script>
-    new Chart(document.getElementById('breakdownChart'), {
-        type: 'doughnut',
-        data: {
-            labels: {{ chart_labels| safe }},
+new Chart(document.getElementById('breakdownChart'), {
+    type: 'doughnut',
+    data: {
+        labels: {{ chart_labels|safe }},
         datasets: [{
-            data: {{ chart_values| safe }},
-        backgroundColor: ['#3D5A45', '#8B8378', '#C75D3B', '#D9D4C8'],
-        borderColor: '#F7F5F0',
-        borderWidth: 2
+            data: {{ chart_values|safe }},
+            backgroundColor: ['#3D5A45', '#8B8378', '#C75D3B', '#D9D4C8'],
+            borderColor: '#F7F5F0',
+            borderWidth: 2
         }]
     },
-        options: {
+    options: {
         plugins: { legend: { labels: { font: { family: 'Inter' } } } }
     }
 });
@@ -95,8 +88,7 @@
         </tbody>
     </table>
     {% else %}
-    <p class="text-sm text-stone">No activity logged yet. <a href="{% url 'log_activity' %}"
-            class="text-moss font-medium hover:text-mossdark focus-ring">Log your first activity →</a></p>
+    <p class="text-sm text-stone">No activity logged yet. <a href="{% url 'log_activity' %}" class="text-moss font-medium hover:text-mossdark focus-ring">Log your first activity →</a></p>
     {% endif %}
 </div>
 {% endblock %}
