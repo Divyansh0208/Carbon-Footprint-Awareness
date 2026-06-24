@@ -1,3 +1,5 @@
+![Carbon Footprint Awareness](./carbon-ledger.png)
+
 # 🌿 Carbon Footprint Awareness
 
 > **Understand → Track → Reduce** your carbon emissions with AI-powered insights.
